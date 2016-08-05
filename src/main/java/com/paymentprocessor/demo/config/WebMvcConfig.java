@@ -76,7 +76,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     public InternalResourceViewResolver getInternalResourceViewResolver() {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
         resolver.setPrefix("/pages/");
-        resolver.setSuffix(".jsp");
+        //resolver.setSuffix(".ftl");
         resolver.setOrder(2);
         return resolver;
     }

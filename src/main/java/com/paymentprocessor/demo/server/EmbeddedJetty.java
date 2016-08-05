@@ -1,8 +1,6 @@
 package com.paymentprocessor.demo.server;
 
 import java.io.IOException;
-
-import org.apache.jasper.servlet.JspServlet;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -14,11 +12,14 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
+import freemarker.ext.servlet.FreemarkerServlet;
+
+
 public class EmbeddedJetty {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmbeddedJetty.class);
     
-    private static final int PORT = 9290;
+    private static final int PORT = 4567;
     
     private static final String CONTEXT_PATH = "/";
     private static final String CONFIG_LOCATION_PACKAGE = "com.paymentprocessor.demo.config";
@@ -26,11 +27,12 @@ public class EmbeddedJetty {
     private static final String WEBAPP_DIRECTORY = "webapp";
     
     public static void main(String[] args) throws Exception {
+    	LOGGER.info("Hello world!!!");
         new EmbeddedJetty().startJetty(PORT);
     }
 
     private void startJetty(int port) throws Exception {
-        LOGGER.debug("Starting server at port {}", port);
+        LOGGER.info("Starting server at port {}", port);
         Server server = new Server(port);
         
         server.setHandler(getServletContextHandler());
@@ -49,9 +51,9 @@ public class EmbeddedJetty {
         contextHandler.setResourceBase(new ClassPathResource(WEBAPP_DIRECTORY).getURI().toString());
         contextHandler.setContextPath(CONTEXT_PATH);
         
-        // JSP
-        contextHandler.setClassLoader(Thread.currentThread().getContextClassLoader()); // required to charge JspServlet
-        contextHandler.addServlet(JspServlet.class, "*.jsp");
+        // freemarker
+        //contextHandler.setClassLoader(Thread.currentThread().getContextClassLoader()); // required to charge JspServlet
+        contextHandler.addServlet(FreemarkerServlet.class, "*.ftl");
         
         // Spring
         WebApplicationContext webAppContext = getWebApplicationContext();
